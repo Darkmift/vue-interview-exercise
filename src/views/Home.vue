@@ -1,18 +1,35 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-  </div>
+	<div class="home flex column">
+		<action-bar />
+		<div class="products-container flex j-between">
+			<product-list />
+			<product-details />
+		</div>
+	</div>
 </template>
 
+<style lang="scss">
+.home {
+	padding: 1vmin;
+	margin: 1vh 1vw;
+	flex: 1 1 auto;
+	.products-container {
+		max-width: 90vw;
+		margin-top: 1vh;
+	}
+}
+</style>
+
 <script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
+import ActionBar from "@/components/ActionBar";
+import ProductList from "@/components/ProductList";
+import ProductDetails from "@/components/ProductDetails";
 
 export default {
-  name: 'Home',
-  components: {
-    HelloWorld
-  }
-}
+	components: {
+		ActionBar,
+		ProductList,
+		ProductDetails,
+	},
+};
 </script>
