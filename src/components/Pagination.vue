@@ -55,9 +55,10 @@ export default {
 			return this.$store.getters.getPaginationData;
 		},
 		pagesCount() {
-			return (
+			const count = Math.ceil(
 				this.getPaginationData.productAmount / this.getPaginationData.limit
 			);
+			return count;
 		},
 		page: {
 			get() {

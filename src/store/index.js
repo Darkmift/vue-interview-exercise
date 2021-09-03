@@ -18,6 +18,7 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     products: mockData,
+    filteredProducts: [],
     page: 0,
     limit: 4,
     selectedProductId: null,
@@ -27,21 +28,21 @@ export default new Vuex.Store({
   getters: {
     getCategory({ category }) { return category },
     getSearchTerm({ searchTerm }) { return searchTerm },
-    productListPage({ category, searchTerm, products, limit, page }) {
+    productListPage(state) {
+      let { category, searchTerm, products, limit, page } = state
       const sortByField = category === 1 ? 'name' : 'dateAdded'
       const arraySortByCategory = products.sort((a, b) => a[sortByField] - b[sortByField])
 
       const unfilteredPage = paginate(arraySortByCategory, limit, page)
-      if (!searchTerm) return unfilteredPage
 
-      const filterArr = products.filter(p => p.name.includes(searchTerm) || p.description.includes(searchTerm))
-      console.log("🚀 ~ file: index.js ~ line 38 ~ productListPage ~ filterArr", filterArr)
+      if (!searchTerm) {
+        state.filteredProducts = []
+        return unfilteredPage
+      }
+      if (!state.filteredProducts.length) page = 0
+      state.filteredProducts = products.filter(p => p.name.includes(searchTerm) || p.description.includes(searchTerm))
 
-      page = 0;
-
-      const filteredPage = filterArr.length ?
-        paginate(filterArr, limit, page)
-        : []
+      const filteredPage = paginate(state.filteredProducts, limit, page)
 
       return filteredPage
     },
@@ -50,7 +51,14 @@ export default new Vuex.Store({
       const targetProduct = products.find(p => p.id === selectedProductId)
       return targetProduct
     },
-    getPaginationData({ products, limit, page }) { return { productAmount: products.length, limit, page } }
+    getPaginationData({ products, filteredProducts, limit, page }) {
+      console.log("🚀 ~ file: index.js ~ line 56 ~ getPaginationData ~ filteredProducts", filteredProducts)
+      return {
+        productAmount: filteredProducts.length ? filteredProducts.length : products.length,
+        limit,
+        page
+      }
+    }
   },
   mutations: {
     setSelectedProduct(state, productID) {
