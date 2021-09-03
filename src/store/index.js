@@ -30,17 +30,19 @@ export default new Vuex.Store({
     productListPage({ category, searchTerm, products, limit, page }) {
       const sortByField = category === 1 ? 'name' : 'dateAdded'
       const arraySortByCategory = products.sort((a, b) => a[sortByField] - b[sortByField])
-      const unfilteredPage = paginate(arraySortByCategory, limit, page)
 
-      // arraySortByCategory.slice(((page - 1) * limit), page * limit)
-      console.log("🚀 ~ file: index.js ~ line 28 ~ productListPage ~ unfilteredPage", { page, unfilteredPage })
+      const unfilteredPage = paginate(arraySortByCategory, limit, page)
       if (!searchTerm) return unfilteredPage
 
       const filterArr = products.filter(p => p.name.includes(searchTerm) || p.description.includes(searchTerm))
-      const filteredPage = filterArr ?
+      console.log("🚀 ~ file: index.js ~ line 38 ~ productListPage ~ filterArr", filterArr)
+
+      page = 0;
+
+      const filteredPage = filterArr.length ?
         paginate(filterArr, limit, page)
-        // filterArr.slice(((page - 1) * limit), page * limit) 
         : []
+
       return filteredPage
     },
     selectedProduct({ products, selectedProductId }) {
