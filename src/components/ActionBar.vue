@@ -13,9 +13,31 @@
 			/>
 		</div>
 
-		<select name="category-select" class="category-select main-border">
+		<!-- <select
+			name="category-select"
+			class="category-select main-border"
+			v-model="category"
+		>
 			<option value="date">Recently Added</option>
-			<option value="product-name">Name</option>
+			<option value="name">Name</option>
+		</select> -->
+		<!-- <v-select
+			name="category-select"
+			class="category-select main-border"
+			v-model="selected"
+			:options="options"
+			label="labels"
+		>
+		</v-select> -->
+
+		<select v-model="selected">
+			<!-- inline object literal -->
+			<option
+				v-for="option in options"
+				:key="option.id"
+				:value="option.id"
+				:label="option.label"
+			></option>
 		</select>
 	</div>
 </template>
@@ -55,7 +77,14 @@
 export default {
 	name: "Action-Bar",
 	data() {
-		return { timeout: null, debouncedInput: "" };
+		return {
+			timeout: null,
+			debouncedInput: "",
+			options: [
+				{ id: 1, label: "Name" },
+				{ id: 2, label: "Recently Added" },
+			],
+		};
 	},
 	computed: {
 		searchTerm: {
@@ -68,6 +97,21 @@ export default {
 					this.debouncedInput = val;
 					this.$store.commit("setSearchTerm", this.debouncedInput);
 				}, 300);
+			},
+		},
+		// selected() {
+		// 	console.log(
+		// 		"🚀 ~ file: ActionBar.vue ~ line 105 ~ selected ~ this.$store.getters.getCategory",
+		// 		this.$store.getters.getCategory
+		// 	);
+		// 	return this.$store.getters.getCategory;
+		// },
+		selected: {
+			get: function () {
+				return this.$store.getters.getCategory;
+			},
+			set: function () {
+				this.$store.commit("toggleCategory");
 			},
 		},
 	},

@@ -15,24 +15,25 @@ export default new Vuex.Store({
     page: 0,
     limit: 4,
     selectedProductId: null,
-    searchTerm: ''
+    searchTerm: '',
+    category: 1
   },
   getters: {
+    getCategory({ category }) { return category },
     getSearchTerm({ searchTerm }) { return searchTerm },
-    productListPage({ searchTerm, products, limit, page }) {
-      const unfilteredPage = products.slice((page * limit), limit)
+    productListPage({ category, searchTerm, products, limit, page }) {
+      const sortByField = category === 1 ? 'name' : 'dateAdded'
+      const arraySortByCategory = products.sort((a, b) => a[sortByField] - b[sortByField])
+      const unfilteredPage = arraySortByCategory.slice((page * limit), limit)
       if (!searchTerm) return unfilteredPage
 
       const filterArr = products.filter(p => p.name.includes(searchTerm) || p.description.includes(searchTerm))
-      console.log("🚀 ~ file: index.js ~ line 27 ~ productListPage ~ filterArr", filterArr)
       const filteredPage = filterArr ? filterArr.slice((page * limit), limit) : []
       return filteredPage
     },
     selectedProduct({ products, selectedProductId }) {
       if (!selectedProductId) return null
       const targetProduct = products.find(p => p.id === selectedProductId)
-      console.log("🚀 ~ file: index.js ~ line 27 ~ selectedProduct ~ targetProduct", targetProduct)
-      // return JSON.parse(JSON.stringify(targetProduct))
       return targetProduct
     }
   },
@@ -52,6 +53,9 @@ export default new Vuex.Store({
     },
     setSearchTerm(state, newSearchTerm) {
       state.searchTerm = newSearchTerm
+    },
+    toggleCategory(state) {
+      state.category = state.category === 1 ? 2 : 1
     }
   },
   actions: {

@@ -113,10 +113,6 @@ export default {
 		selectedProduct: {
 			handler: function (val) {
 				this.editProduct = { ...val };
-				console.log(
-					"🚀 ~ file: ProductDetails.vue ~ line 105 ~ this.editProduct",
-					this.editProduct
-				);
 			},
 			deep: true,
 			immediate: true,
