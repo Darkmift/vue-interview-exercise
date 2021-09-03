@@ -1,5 +1,5 @@
 <template>
-	<ul class="pagination">
+	<ul class="pagination" v-if="productListPage.length">
 		<li class="page-item">
 			<button type="button" class="page-link" v-if="page != 1" @click="page--">
 				Previous
@@ -54,9 +54,16 @@ export default {
 		getPaginationData() {
 			return this.$store.getters.getPaginationData;
 		},
+		productListPage() {
+			return this.$store.getters.productListPage;
+		},
 		pagesCount() {
 			const count = Math.ceil(
 				this.getPaginationData.productAmount / this.getPaginationData.limit
+			);
+			console.log(
+				"🚀 ~ file: Pagination.vue ~ line 63 ~ pagesCount ~ count",
+				count
 			);
 			return count;
 		},

@@ -43,7 +43,6 @@ export default new Vuex.Store({
       state.filteredProducts = products.filter(p => p.name.includes(searchTerm) || p.description.includes(searchTerm))
 
       const filteredPage = paginate(state.filteredProducts, limit, page)
-
       return filteredPage
     },
     selectedProduct({ products, selectedProductId }) {
@@ -52,7 +51,6 @@ export default new Vuex.Store({
       return targetProduct
     },
     getPaginationData({ products, filteredProducts, limit, page }) {
-      console.log("🚀 ~ file: index.js ~ line 56 ~ getPaginationData ~ filteredProducts", filteredProducts)
       return {
         productAmount: filteredProducts.length ? filteredProducts.length : products.length,
         limit,
