@@ -31,12 +31,16 @@ export default new Vuex.Store({
   },
   mutations: {
     setSelectedProduct(state, productID) {
+      if (!productID) {
+        state.selectedProductId = { id: null, name: '', description: '', price: 0, imageUrl: '' }
+        return
+      }
       state.selectedProductId = productID
     },
     updateProducts({ products }, product) {
       //check if idx exists...if yes override else push
       const productIdx = products.findIndex(p => p.id === product.id)
-      if (productIdx === -1) products.push(product)
+      if (productIdx === -1) products.unshift(product)
       Vue.set(products, productIdx, product)
     }
   },

@@ -1,6 +1,6 @@
 <template>
 	<div class="action-bar flex a-center">
-		<button class="btn add-btn">+ Add</button>
+		<button class="btn add-btn" @click="addNew">+ Add</button>
 
 		<div class="search-products-wrapper flex a-center main-border">
 			<img src="@/assets/images/Magnifying_glass_icon.svg" />
@@ -68,6 +68,11 @@ export default {
 					this.debouncedInput = val;
 				}, 300);
 			},
+		},
+	},
+	methods: {
+		addNew() {
+			this.$store.commit("setSelectedProduct", null);
 		},
 	},
 };
