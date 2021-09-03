@@ -5,14 +5,14 @@
 			<h4 class="title">{{ product.name }}</h4>
 			<p class="description">{{ product.description }}</p>
 		</div>
-		<button class="btn">Details</button>
+		<button class="btn" @click="setSelectedProduct">Details</button>
 	</div>
 </template>
 
 <style lang="scss" scoped>
 .product-card {
 	max-height: 25vh;
-	margin:1vmin;
+	margin: 1vmin;
 	text-transform: capitalize;
 	.img {
 		margin: 2vh;
@@ -41,5 +41,10 @@ export default {
 		},
 	},
 	name: "product-card",
+	methods: {
+		setSelectedProduct() {
+			this.$store.commit("setSelectedProduct", this.product.id);
+		},
+	},
 };
 </script>

@@ -8,6 +8,8 @@
 				type="text"
 				class="search-products"
 				placeholder="search-products"
+				v-model="searchTerm"
+				oninput=""
 			/>
 		</div>
 
@@ -48,3 +50,25 @@
 	}
 }
 </style>
+
+<script>
+export default {
+	name: "Action-Bar",
+	data() {
+		return { timeout: null, debouncedInput: "" };
+	},
+	computed: {
+		searchTerm: {
+			get() {
+				return this.debouncedInput;
+			},
+			set(val) {
+				if (this.timeout) clearTimeout(this.timeout);
+				this.timeout = setTimeout(() => {
+					this.debouncedInput = val;
+				}, 300);
+			},
+		},
+	},
+};
+</script>

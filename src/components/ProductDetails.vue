@@ -1,18 +1,28 @@
 <template>
 	<fieldset class="product-details flex column">
-		<legend v-if="selectedProduct">{{ selectedProduct.name }}</legend>
+		<legend v-if="editProduct">{{ editProduct.name }}</legend>
 
-		<div class="wrapper flex column" v-if="selectedProduct">
-			<img :src="selectedProduct.imageUrl || defaultUrl" alt="" class="img" />
+		<form
+			@submit.prevent="saveChanges"
+			class="wrapper flex column"
+			v-if="editProduct"
+		>
+			<img :src="editProduct.imageUrl || defaultUrl" alt="" class="img" />
 			<!-- name -->
 			<label class="name-label">Name</label>
-			<input type="text" name="product-name" :value="selectedProduct.name" />
+			<input
+				type="text"
+				name="product-name"
+				:value="editProduct.name"
+				@change="updateValue('name', $event)"
+			/>
 			<!-- description -->
 			<label class="name-description">Name</label>
 			<textarea
 				type="text"
 				name="product-description"
-				:value="selectedProduct.description"
+				:value="editProduct.description"
+				@change="updateValue('description', $event)"
 			/>
 			<!-- price -->
 			<label class="name-label">Price</label>
@@ -21,13 +31,14 @@
 					type="number"
 					name="product-price"
 					class="product-price"
-					:value="selectedProduct.price"
+					:value="editProduct.price"
+					@change="updateValue('price', $event)"
 				/>
 				<span class="price-after">$</span>
 			</div>
 
-			<div class="btn save-btn">Save</div>
-		</div>
+			<button class="btn save-btn">Save</button>
+		</form>
 	</fieldset>
 </template>
 
@@ -83,21 +94,43 @@
 </style>
 
 <script>
+import makeId from "../utils/makeId";
 export default {
 	name: "product-details",
 	data() {
 		return {
+			editProduct: null,
 			defaultUrl:
 				"https://wtwp.com/wp-content/uploads/2015/06/placeholder-image-300x225.png",
 		};
 	},
 	computed: {
 		selectedProduct() {
-			console.log(
-				"🚀 ~ file: ProductDetails.vue ~ line 25 ~ selectedProduct ~ this.$store.getters.selectedProduct;",
-				this.$store.getters.selectedProduct
-			);
 			return this.$store.getters.selectedProduct;
+		},
+	},
+	watch: {
+		selectedProduct: {
+			handler: function (val) {
+				this.editProduct = { ...val };
+				console.log(
+					"🚀 ~ file: ProductDetails.vue ~ line 105 ~ this.editProduct",
+					this.editProduct
+				);
+			},
+			deep: true,
+			immediate: true,
+		},
+	},
+	methods: {
+		updateValue(name, evt) {
+			this.editProduct[name] = evt.target.value;
+		},
+		saveChanges() {
+			if (!this.editProduct.id) {
+				this.editProduct.id = makeId();
+			}
+			this.$store.commit("updateProducts", this.editProduct);
 		},
 	},
 };
