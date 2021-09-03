@@ -5,6 +5,7 @@
 			<product-list />
 			<product-details />
 		</div>
+		<pagination />
 	</div>
 </template>
 
@@ -24,12 +25,14 @@
 import ActionBar from "@/components/ActionBar";
 import ProductList from "@/components/ProductList";
 import ProductDetails from "@/components/ProductDetails";
+import Pagination from "@/components/Pagination";
 
 export default {
 	components: {
 		ActionBar,
 		ProductList,
 		ProductDetails,
+		Pagination,
 	},
 };
 </script>
