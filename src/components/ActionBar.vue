@@ -66,6 +66,7 @@ export default {
 				if (this.timeout) clearTimeout(this.timeout);
 				this.timeout = setTimeout(() => {
 					this.debouncedInput = val;
+					this.$store.commit("setSearchTerm", this.debouncedInput);
 				}, 300);
 			},
 		},

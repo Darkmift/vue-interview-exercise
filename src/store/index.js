@@ -14,12 +14,19 @@ export default new Vuex.Store({
     products: mockData,
     page: 0,
     limit: 4,
-    selectedProductId: null
+    selectedProductId: null,
+    searchTerm: ''
   },
   getters: {
-    productListPage(state) {
-      const { limit, page } = state
-      return state.products.slice((page * limit), state.limit)
+    getSearchTerm({ searchTerm }) { return searchTerm },
+    productListPage({ searchTerm, products, limit, page }) {
+      const unfilteredPage = products.slice((page * limit), limit)
+      if (!searchTerm) return unfilteredPage
+
+      const filterArr = products.filter(p => p.name.includes(searchTerm) || p.description.includes(searchTerm))
+      console.log("🚀 ~ file: index.js ~ line 27 ~ productListPage ~ filterArr", filterArr)
+      const filteredPage = filterArr ? filterArr.slice((page * limit), limit) : []
+      return filteredPage
     },
     selectedProduct({ products, selectedProductId }) {
       if (!selectedProductId) return null
@@ -42,6 +49,9 @@ export default new Vuex.Store({
       const productIdx = products.findIndex(p => p.id === product.id)
       if (productIdx === -1) products.unshift(product)
       Vue.set(products, productIdx, product)
+    },
+    setSearchTerm(state, newSearchTerm) {
+      state.searchTerm = newSearchTerm
     }
   },
   actions: {
